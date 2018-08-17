@@ -5,7 +5,6 @@ namespace App\Domain\Recipient\Models;
 use App\Domain\Voucher\Models\Voucher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Prettus\Repository\Contracts\Transformable;
 
 class Recipient extends Model
 {
@@ -15,6 +14,8 @@ class Recipient extends Model
         'name',
         'email'
     ];
+
+    protected $guarded = ['id'];
 
 
     /**

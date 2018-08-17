@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Context\Api\Http\Controllers;
+namespace App\Context\Api\Http\Controllers\Recipient;
 
 use App\Core\Http\Controllers\Controller;
+use App\Domain\Recipient\Exceptions\RecipientAlreadyExistsException;
 use App\Domain\Recipient\Repositories\RecipientRepository;
-use App\Domain\Recipient\Transformers\RecipientTransformer;
+use App\Domain\Recipient\Validators\RecipientValidator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -39,11 +40,23 @@ class RecipientController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(RecipientValidator $validator, Request $request)
     {
-        $this->repository->validator();
+        $this->validate($request,$validator->getRules('create'));
 
-        return response()->json($this->repository->create($request->all()),Response::HTTP_CREATED);
+        try {
+
+            return response()->json($this->repository->store($request->all()),Response::HTTP_CREATED);
+
+        } catch (RecipientAlreadyExistsException $exception) {
+
+            return response()->json(['code' => $exception->getCode(),'message'=>$exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        } catch (\Exception $exception) {
+
+            return response()->json($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+
+        }
 
     }
 

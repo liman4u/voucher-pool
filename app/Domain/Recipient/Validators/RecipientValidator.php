@@ -12,6 +12,10 @@ class RecipientValidator extends LaravelValidator
         ValidatorInterface::RULE_CREATE => [
             'name' => 'required',
             'email'  => 'required|unique:recipients,email'
+        ],
+        ValidatorInterface::RULE_UPDATE => [
+            'name' => 'required',
+            'email'  => 'required|unique:recipients,email'
         ]
     ];
 }

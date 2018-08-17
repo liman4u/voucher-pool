@@ -9,15 +9,16 @@
 
 $router->group(['prefix' => 'v1'], function ($router) {
 
-    $router->get('/test', function () use ($router) {
-        return "Hello";
+    //Recipients
+    $router->group([
+        'prefix' => 'recipients',
+        'namespace' => 'Recipient'
+    ], function ($router) {
+        $router->get('/', 'RecipientController@index');
+        $router->post('/', 'RecipientController@store');
     });
 
-    //Recipients
-
-
     //Offers
-
 
     //Vouchers
 });

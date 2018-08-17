@@ -12,7 +12,7 @@ class RecipientTransformer extends TransformerAbstract
         return [
             'id'      => (int) $recipient->id,
             'name'   => $recipient->name,
-            'discount' => (double) $recipient->discount,
+            'email' =>  $recipient->email,
         ];
     }
 }
