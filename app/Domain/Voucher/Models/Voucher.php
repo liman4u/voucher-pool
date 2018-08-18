@@ -19,6 +19,13 @@ class Voucher extends Model
         'used_at'
     ];
 
+    protected $guarded = ['id'];
+
+    protected $dates = [
+        'expires_at',
+        'used_at'
+    ];
+
     /**
      * Belongs To relation
      *

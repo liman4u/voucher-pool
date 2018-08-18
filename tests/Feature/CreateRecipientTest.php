@@ -6,7 +6,7 @@
  * Time: 11:32 PM
  */
 
-namespace Test\Features;
+namespace Test\Feature;
 
 
 use App\Domain\Recipient\Models\Recipient;

@@ -11,9 +11,22 @@
 |
 */
 
+// Factory for Recipient Model
 $factory->define(\App\Domain\Recipient\Models\Recipient::class, function (Faker\Generator $faker) {
+
     return [
         'name' => $faker->name,
-        'email' => $faker->email,
+        'email' => $faker->email
     ];
+
+});
+
+// Factory for Offer Model
+$factory->define(App\Domain\Offer\Models\Offer::class, function (Faker\Generator $faker) {
+
+    return [
+        'name' => $faker->name,
+        'discount' => $faker->randomFloat(2, 0, 100)
+    ];
+
 });

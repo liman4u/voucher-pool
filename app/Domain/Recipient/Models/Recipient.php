@@ -10,11 +10,19 @@ class Recipient extends Model
 {
     use SoftDeletes;
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'name',
         'email'
     ];
 
+    /**
+     * Prevents insertion with id
+     *
+     * @var array
+     */
     protected $guarded = ['id'];
 
 

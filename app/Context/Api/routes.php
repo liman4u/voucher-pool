@@ -19,6 +19,13 @@ $router->group(['prefix' => 'v1'], function ($router) {
     });
 
     //Offers
+    $router->group([
+        'prefix' => 'offers',
+        'namespace' => 'Offer'
+    ], function ($router) {
+        $router->get('/', 'OfferController@index');
+        $router->post('/', 'OfferController@store');
+    });
 
     //Vouchers
 });

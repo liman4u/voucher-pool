@@ -2,6 +2,7 @@
 
 namespace App\Domain\Offer\Repositories;
 
+use App\Domain\Offer\Exceptions\OfferAlreadyExistsException;
 use App\Domain\Offer\Models\Offer;
 use Prettus\Repository\Eloquent\BaseRepository;
 
@@ -21,11 +22,13 @@ class OfferRepository extends BaseRepository
      */
     public function presenter()
     {
-        return "Prettus\\Repository\\Presenter\\ModelFractalPresenter";
+        return "App\\Domain\\Offer\\Presenters\\OfferPresenter";
     }
 
 
     /**
+     * Store action
+     *
      * @param array $inputs
      * @return mixed
      */
@@ -34,10 +37,16 @@ class OfferRepository extends BaseRepository
         //Check if offer is already in records
         $this->checkOffer($inputs['name']);
         $this->skipPresenter(false);
+
+        //generate slug and assign to alias
+        $inputs['alias'] = str_slug($inputs['name']);
+
         return parent::create($inputs);
     }
 
     /**
+     * Update action
+     *
      * @param array $inputs
      * @return mixed
      */
@@ -58,7 +67,7 @@ class OfferRepository extends BaseRepository
         $offer = $this->skipPresenter()->findByField('alias',$alias)->first();
 
         if($offer){
-            //TODO
+            throw new OfferAlreadyExistsException();
         }
     }
 }

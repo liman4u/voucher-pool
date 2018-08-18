@@ -1,30 +1,36 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: liman
+ * Date: 8/18/18
+ * Time: 4:54 AM
+ */
 
-namespace App\Context\Api\Http\Controllers\Recipient;
+namespace App\Context\Api\Http\Controllers\Offer;
 
 use App\Core\Http\Controllers\Controller;
-use App\Domain\Recipient\Exceptions\RecipientAlreadyExistsException;
-use App\Domain\Recipient\Repositories\RecipientRepository;
-use App\Domain\Recipient\Validators\RecipientValidator;
+use App\Domain\Offer\Exceptions\OfferAlreadyExistsException;
+use App\Domain\Offer\Repositories\OfferRepository;
+use App\Domain\Offer\Validators\OfferValidator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Prettus\Validator\Contracts\ValidatorInterface;
 
-class RecipientController extends Controller
+class OfferController extends Controller
 {
+
     /**
-     * @var RecipientRepository
+     * @var OfferRepository
      */
     protected $repository;
 
     /**
-     * RecipientController constructor.
-     * @param RecipientRepository $repository
+     * OfferController constructor.
+     * @param OfferRepository $repository
      */
-    public function __construct(RecipientRepository $repository){
+    public function __construct(OfferRepository $repository){
         $this->repository = $repository;
     }
-
 
     /**
      * Display a listing of the resource.
@@ -41,7 +47,7 @@ class RecipientController extends Controller
      *
      * @return Response
      */
-    public function store(RecipientValidator $validator, Request $request)
+    public function store(OfferValidator $validator, Request $request)
     {
         $this->validate($request,$validator->getRules(ValidatorInterface::RULE_CREATE));
 
@@ -49,7 +55,7 @@ class RecipientController extends Controller
 
             return response()->json($this->repository->store($request->all()),Response::HTTP_CREATED);
 
-        } catch (RecipientAlreadyExistsException $exception) {
+        } catch (OfferAlreadyExistsException $exception) {
 
             return response()->json(['code' => $exception->getCode(),'message'=>$exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
 

@@ -5,30 +5,27 @@ namespace App\Domain\Offer\Models;
 use App\Domain\Voucher\Models\Voucher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Prettus\Repository\Contracts\Transformable;
 
-class Offer extends Model implements Transformable
+class Offer extends Model
 {
     use SoftDeletes;
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'name',
         'alias',
         'discount'
     ];
 
-
     /**
-     * @return array
+     * Prevents insertion with id
+     *
+     * @var array
      */
-    public function transform()
-    {
-        return [
-            'id'      => (int) $this->id,
-            'name'   => $this->name,
-            'discount' => (double) $this->discount,
-        ];
-    }
+    protected $guarded = ['id'];
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
