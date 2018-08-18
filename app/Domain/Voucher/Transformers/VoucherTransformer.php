@@ -12,9 +12,8 @@ class VoucherTransformer extends TransformerAbstract
         return [
             'id'      => (int) $voucher->id,
             'code'   => $voucher->code,
-            'expires_at' =>  $voucher->expires_at,
-            'is_used' =>  $voucher->is_used,
-            'used_at' =>  $voucher->used_at
+            'expires_at' =>  $voucher->expires_at->format('Y-m-d H:i:s'),
+            'used_at' =>  $voucher->used_at ? $voucher->used_at->format('Y-m-d H:i:s') : ''
         ];
     }
 }

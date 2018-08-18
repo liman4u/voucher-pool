@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Domain\Recipient\Presenters;
+namespace App\Domain\Voucher\Presenters;
 
-use App\Domain\Recipient\Transformers\RecipientTransformer;
+use App\Domain\Voucher\Transformers\VoucherTransformer;
 use Prettus\Repository\Presenter\FractalPresenter;
 
-class RecipientPresenter extends FractalPresenter
+class VoucherPresenter extends FractalPresenter
 {
 
     /**
@@ -15,6 +15,6 @@ class RecipientPresenter extends FractalPresenter
      */
     public function getTransformer()
     {
-        return new RecipientTransformer();
+        return new VoucherTransformer();
     }
 }

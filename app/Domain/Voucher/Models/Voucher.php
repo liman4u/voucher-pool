@@ -4,6 +4,7 @@ namespace App\Domain\Voucher\Models;
 
 use App\Domain\Offer\Models\Offer;
 use App\Domain\Recipient\Models\Recipient;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -44,5 +45,21 @@ class Voucher extends Model
     public function recipient()
     {
         return $this->belongsTo(Recipient::class);
+    }
+
+    /**
+     * Check for used and expired voucher code
+     *
+     * @return mixed
+     */
+    public function isValid()
+    {
+        if ($this->is_used == 0) {
+
+            return (Carbon::now())->diffInHours($this->expires_at, false) > 0;
+
+        }
+
+        return false;
     }
 }

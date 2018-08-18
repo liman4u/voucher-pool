@@ -28,4 +28,13 @@ $router->group(['prefix' => 'v1'], function ($router) {
     });
 
     //Vouchers
+    $router->group([
+        'prefix' => 'vouchers',
+        'namespace' => 'Voucher'
+    ], function ($router) {
+        $router->post('/generate', 'VoucherController@generateVoucherCode');
+        $router->get('/validate', 'VoucherController@validateVoucherCode');
+        $router->get('/recipient', 'VoucherController@getRecipientVoucherCodes');
+
+    });
 });
