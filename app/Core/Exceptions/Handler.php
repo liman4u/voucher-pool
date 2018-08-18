@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
+
     /**
      * A list of the exception types that should not be reported.
      *
@@ -45,6 +46,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+
         return parent::render($request, $exception);
     }
 }
