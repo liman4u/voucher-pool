@@ -14,6 +14,7 @@ services:
     container_name: voucherpool-mysql
     volumes:
       - voucherpool-mysql-data:/var/lib/mysql
+      - ./database/:/docker-entrypoint-initdb.d
     ports:
       - "33306:3306"
     environment:
