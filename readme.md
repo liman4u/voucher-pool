@@ -20,15 +20,16 @@
 
  **How to run**
 - Clone for Github
-
+```bash
 git clone git@github.com:liman4u/voucher-pool.git
 
 cd voucher-pool
+```
 
 - To start the application server and run tests, run the following from root of application:
-
+```bash
 sh ./install.sh
-
+```
 - Tests can also be run separately by running[from the project's root folder] "composer test" when the docker container is up and running
 
 - In case the install.sh does not seem to be runnable, use chmod 400 install.sh

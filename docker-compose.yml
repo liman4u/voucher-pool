@@ -1,41 +1,36 @@
+# v2 syntax
 version: '2'
-services:
 
-  # The Application
-  app:
-    build:
-      context: ./
-      dockerfile: app.dockerfile
-    working_dir: /var/www
-    volumes:
-      - ./:/var/www
-    environment:
-      - "DB_PORT=3306"
-      - "DB_HOST=database"
-
-  # The Web Server
-  web:
-    build:
-      context: ./
-      dockerfile: web.dockerfile
-    working_dir: /var/www
-    volumes_from:
-      - app
-    ports:
-      - 8080:80
-
-  # The Database
-  database:
-    image: mysql:5.6
-    volumes:
-      - dbdata:/var/lib/mysql
-    environment:
-      - "MYSQL_DATABASE=voucherpool"
-      - "MYSQL_USER=voucherpool"
-      - "MYSQL_PASSWORD=voucherpool"
-      - "MYSQL_ROOT_PASSWORD=voucherpool"
-    ports:
-        - "33061:3306"
-
+# Named volumes
 volumes:
-  dbdata:
+  # MySQL Data
+  voucherpool-mysql-data:
+    driver: local
+
+services:
+  # MySQL (5.7)
+  mysql:
+    image: ambientum/mysql:5.7
+    container_name: voucherpool-mysql
+    volumes:
+      - voucherpool-mysql-data:/var/lib/mysql
+    ports:
+      - "33306:3306"
+    environment:
+          - MYSQL_HOST=localhost
+          - MYSQL_PORT=33306
+          - MYSQL_ROOT_PASSWORD=voucher_pool
+          - MYSQL_DATABASE=voucher_pool_db
+          - MYSQL_USER=voucher_pool
+          - MYSQL_PASSWORD=voucher_pool
+
+  # PHP (with nginx)
+  app:
+    image: ambientum/php:7.1-nginx
+    container_name: voucherpool-app
+    volumes:
+      - .:/var/www/app
+    ports:
+      - "8000:8000"
+    links:
+      - mysql

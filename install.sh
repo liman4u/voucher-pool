@@ -11,9 +11,12 @@ sleep 30
 >&2 echo "MySql started :)"
 >&2 echo "Running all phpunit tests now...."
 
-docker container exec -it voucherpoolapi_web  php artisan migrate
+docker container exec -it voucherpool-app php artisan migrate
+>&2 echo "Database migrations done..."
 
 
-docker container exec -it voucherpoolapi_web  composer test:all
+docker container exec -it voucherpool-app composer test
+>&2 echo "All tests done..."
+
 
 >&2 echo "Voucher pool api v1 is now ready "
