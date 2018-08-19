@@ -4,6 +4,7 @@ namespace App\Context\Api\Http\Traits;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use League\Fractal\Manager;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
@@ -71,6 +72,18 @@ trait ResponseTrait
      */
     protected function respondWithArray(array $array)
     {
-        return response()->json(['success'=> true ,'count'=> count($array),'data'=>$array['data']], $this->statusCode);
+        return response()->json(['success'=> true ,'count'=> count($array['data']),'data'=>$array['data']], $this->statusCode);
+    }
+
+
+    /**
+     * Return json response with validation errors
+     *
+     * @param Request $request
+     * @param array $errors
+     * @return array
+     */
+    protected function buildFailedValidationResponse(Request $request, array $errors) {
+        return response()->json(['success'=> false ,'errors'=> $errors,'message'=>'Forbidden'], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

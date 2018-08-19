@@ -75,7 +75,9 @@ class Handler extends ExceptionHandler
 
         }  elseif ($e) {
 
-            $e = new HttpException($status, 'HTTP_INTERNAL_SERVER_ERROR');
+            //$e = new HttpException($status, 'HTTP_INTERNAL_SERVER_ERROR');
+
+            return parent::render($request, $e);
 
         }
 

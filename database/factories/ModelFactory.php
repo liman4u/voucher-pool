@@ -30,3 +30,10 @@ $factory->define(App\Domain\Offer\Models\Offer::class, function (Faker\Generator
     ];
 
 });
+
+// Factory for Voucher Model
+$factory->define(App\Domain\Voucher\Models\Voucher::class, function (Faker\Generator $faker) {
+    return [
+        'expires_at' => \Carbon\Carbon::now()->addDays(30), //in the next 30 days
+    ];
+});

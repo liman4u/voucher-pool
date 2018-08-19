@@ -98,6 +98,8 @@ class VoucherController extends Controller
 
             $vouchers = $this->voucherRepository->skipPresenter(false)->all();
 
+            //dd($vouchers);
+
             return $this->respondWithArray($vouchers);
 
             //return response()->json($vouchers->toArray(), Response::HTTP_CREATED);

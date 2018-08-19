@@ -27,11 +27,20 @@ class CreateOfferTest extends \TestCase
 
         $response = $this->post('/api/v1/offers', $offer);
 
-        $response->seeStatusCode(Response::HTTP_CREATED)
-            ->seeJsonContains([
-                'name' => $offer['name'],
-                'discount' => $offer['discount']
-            ]);
+
+        $response
+                ->receiveJson()
+                ->seeStatusCode(Response::HTTP_CREATED)
+                 ->seeJsonContains([
+                'success' => true
+                ])
+                ->seeJsonContains([
+                'data' => [
+                    'name' => $offer['name'],
+                    'discount' => $offer['discount'],
+                    'percentage_discount' => ($offer['discount'] / 100)
+                ]
+                ]);
     }
 
     /**
@@ -41,10 +50,43 @@ class CreateOfferTest extends \TestCase
 
         $response = $this->post('/api/v1/offers', []);
 
-        $response->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response
+            ->seeJsonContains([
+                'success' => false
+            ])
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
+    /**
+     * Test for can not create offer with negative discount
+     */
+    public function testCanNoCreateOfferWithNegativeDiscount()
+    {
+        $offer = factory(Offer::class)->make(['discount' => -10])->toArray();
 
+        $response = $this->post('/api/v1/offers', $offer);
 
+        $response
+            ->seeJsonContains([
+                'success' => false
+            ])
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * Test for can not create offer with higher discount
+     */
+    public function testCanNoCreateOfferWithHigherDiscount()
+    {
+        $offer = factory(Offer::class)->make(['discount' => 200])->toArray();
+
+        $response = $this->post('/api/v1/offers', $offer);
+
+        $response
+            ->seeJsonContains([
+                'success' => false
+            ])
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
 
 }

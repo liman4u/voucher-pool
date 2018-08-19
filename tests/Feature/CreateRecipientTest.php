@@ -27,10 +27,17 @@ class CreateRecipientTest extends \TestCase
 
         $response = $this->post('/api/v1/recipients', $recipient);
 
-        $response->seeStatusCode(Response::HTTP_CREATED)
+        $response
+                 ->receiveJson()
+                 ->seeStatusCode(Response::HTTP_CREATED)
                  ->seeJsonContains([
-                    'name' => $recipient['name'],
-                    'email' => $recipient['email']
+                     'success' => true
+                 ])
+                 ->seeJsonContains([
+                     'data' => [
+                            'name' => $recipient['name'],
+                            'email' => $recipient['email']
+                    ]
                   ]);
     }
 
@@ -41,7 +48,11 @@ class CreateRecipientTest extends \TestCase
 
         $response = $this->post('/api/v1/recipients', []);
 
-        $response->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response
+            ->seeJsonContains([
+            'success' => false
+            ])
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -53,6 +64,10 @@ class CreateRecipientTest extends \TestCase
 
         $response = $this->post('/api/v1/recipients', $recipient);
 
-        $response->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response
+            ->seeJsonContains([
+                'success' => false
+            ])
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }
