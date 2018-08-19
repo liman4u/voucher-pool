@@ -104,12 +104,12 @@ class VoucherController extends Controller
 
         }catch (InvalidVoucherExpiryException $exception){
 
-            return response()->json(['code' => $exception->getCode(),'message'=>$exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
-
+            return $this->failureResponse($exception->getMessage(),Response::HTTP_UNPROCESSABLE_ENTITY);
 
         }catch (\Exception $exception) {
 
-            return response()->json($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->failureResponse($exception->getMessage());
+
 
         }
 
@@ -129,9 +129,21 @@ class VoucherController extends Controller
 
         $this->validate($request,$validator->getRules('validate'));
 
-        $discount = $this->voucherRepository->getVoucherDiscount($request->input('code'));
+        try{
 
-        return response()->json([ 'discount' => $discount]);
+            $discount = $this->voucherRepository->getVoucherDiscount($request->input('code'));
+
+            return $this->successResponse([ 'precentage_discount' => $discount]);
+
+        } catch (\Exception $exception) {
+
+           return $this->failureResponse($exception->getMessage());
+
+
+        }
+
+
+
 
     }
 
@@ -147,25 +159,39 @@ class VoucherController extends Controller
     {
         $this->validate($request,$validator->getRules('recipient'));
 
-        $recipient = $this->recipientRepository->skipPresenter()->findByField('email',$request->input('email'))->first();
+        try{
 
-        $vouchers = $this->voucherRepository->getValidVoucherCodes($recipient->id);
+            $recipient = $this->recipientRepository->skipPresenter()->findByField('email',$request->input('email'))->first();
 
-        $result = array();
+            $vouchers = $this->voucherRepository->getValidVoucherCodes($recipient->id);
 
-        foreach($vouchers as $voucher){
+            $result = array();
 
-            $voucherObject = array();
+            foreach($vouchers as $voucher){
 
-            $voucherObject['code'] = $voucher->code;
+                $voucherObject = array();
 
-            $voucherObject['offerName'] = $voucher->offer->name;
+                $voucherObject['code'] = $voucher->code;
 
-            array_push($result,$voucherObject);
+                $voucherObject['offerName'] = $voucher->offer->name;
+
+                $voucherObject['percentage_discount'] = $voucher->offer->discount / 100;
+
+                $voucherObject['expiryDate'] = $voucher->expires_at->format('Y-m-d H:i:s');
+
+                array_push($result,$voucherObject);
+            }
+
+            return $this->respondWithArray(['data'=>$result]);
+
+
+
+        }catch (\Exception $exception) {
+
+            return $this->failureResponse($exception->getMessage());
+
+
         }
-;
-
-        return response()->json([ 'vouchers' => $result]);
 
 
 

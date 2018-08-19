@@ -8,6 +8,7 @@
 
 namespace App\Context\Api\Http\Controllers\Offer;
 
+use App\Context\Api\Http\Traits\ResponseTrait;
 use App\Core\Http\Controllers\Controller;
 use App\Domain\Offer\Exceptions\OfferAlreadyExistsException;
 use App\Domain\Offer\Repositories\OfferRepository;
@@ -18,6 +19,8 @@ use Prettus\Validator\Contracts\ValidatorInterface;
 
 class OfferController extends Controller
 {
+
+    use ResponseTrait;
 
     /**
      * @var OfferRepository
@@ -39,7 +42,8 @@ class OfferController extends Controller
      */
     public function index()
     {
-        return response()->json($this->repository->paginate(15));
+        return $this->respondWithArray($this->repository->all());
+
     }
 
     /**
@@ -53,15 +57,18 @@ class OfferController extends Controller
 
         try {
 
-            return response()->json($this->repository->store($request->all()),Response::HTTP_CREATED);
+            return $this->respondWithItem($this->repository->store($request->all()));
+
 
         } catch (OfferAlreadyExistsException $exception) {
 
-            return response()->json(['code' => $exception->getCode(),'message'=>$exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->failureResponse($exception->getMessage(),Response::HTTP_UNPROCESSABLE_ENTITY);
+
 
         } catch (\Exception $exception) {
 
-            return response()->json($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->failureResponse($exception->getMessage());
+
 
         }
 

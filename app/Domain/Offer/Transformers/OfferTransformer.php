@@ -13,6 +13,7 @@ class OfferTransformer extends TransformerAbstract
             'id'      => (int) $offer->id,
             'name'   => $offer->name,
             'discount' =>  (double) $offer->discount,
+            'percentage_discount' => $offer->discount / 100,
         ];
     }
 }

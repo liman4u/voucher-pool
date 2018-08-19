@@ -4,6 +4,7 @@ namespace App\Context\Api\Http\Traits;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response;
 use League\Fractal\Manager;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection;
@@ -17,44 +18,9 @@ trait ResponseTrait
      *
      * @var int
      */
-    protected $statusCode = 200;
-    /**
-     * Fractal manager instance
-     *
-     * @var Manager
-     */
-    protected $fractal;
-    /**
-     * Set fractal Manager instance
-     *
-     * @param Manager $fractal
-     * @return void
-     */
-    public function setFractal(Manager $fractal)
-    {
-        $this->fractal = $fractal;
-    }
-    /**
-     * Getter for statusCode
-     *
-     * @return mixed
-     */
-    public function getStatusCode()
-    {
-        return $this->statusCode;
-    }
-    /**
-     * Setter for statusCode
-     *
-     * @param int $statusCode Value to set
-     *
-     * @return self
-     */
-    public function setStatusCode($statusCode)
-    {
-        $this->statusCode = $statusCode;
-        return $this;
-    }
+    protected $statusCode = Response::HTTP_OK;
+
+
     /**
      * Send success response with Data
      *
@@ -67,29 +33,22 @@ trait ResponseTrait
             'success' => true,
             'data' => $data,
         ];
-        return response()->json($response, $response['code']);
+        return response()->json($response, $this->statusCode);
     }
+
     /**
-     * Send custom data response
+     * Send failure response with Message
      *
-     * @param $status
-     * @param $message
+     * @param $data
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendCustomResponse($status, $message)
-    {
-        return response()->json(['success' => true, 'message' => $message], $status);
-    }
-
-
-    /**
-     * Send empty data response
-     *
-     * @return string
-     */
-    public function sendEmptyDataResponse()
-    {
-        return response()->json(['success' => true,'data' => new \StdClass()]);
+    public function failureResponse($message,$statusCode = Response::HTTP_INTERNAL_SERVER_ERROR) {
+        $response = [
+            'success' => false,
+            'message' => $message,
+        ];
+        return response()->json($response, $statusCode);
     }
 
 
@@ -97,14 +56,11 @@ trait ResponseTrait
      * Return single item response from the application
      *
      * @param Model $item
-     * @param \Closure|TransformerAbstract $callback
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithItem($item, $callback)
+    protected function respondWithItem($item,$statusCode = Response::HTTP_CREATED)
     {
-        $resource = new Item($item, $callback);
-        $rootScope = $this->fractal->createData($resource);
-        return $this->respondWithArray($rootScope->toArray());
+        return response()->json(['success'=> true ,'data'=>$item['data']], $statusCode);
     }
     /**
      * Return a json response from the application

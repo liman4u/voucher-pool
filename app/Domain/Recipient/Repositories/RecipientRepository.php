@@ -61,7 +61,7 @@ class RecipientRepository extends BaseRepository
      */
     public function checkRecipient(string $email)
     {
-        $recipient = $this->skipPresenter()->findByField('email',$email)->first();
+        $recipient = $this->skipPresenter(true)->findByField('email',$email)->first();
 
         if($recipient){
             throw  new RecipientAlreadyExistsException();

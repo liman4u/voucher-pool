@@ -2,6 +2,7 @@
 
 namespace App\Context\Api\Http\Controllers\Recipient;
 
+use App\Context\Api\Http\Traits\ResponseTrait;
 use App\Core\Http\Controllers\Controller;
 use App\Domain\Recipient\Exceptions\RecipientAlreadyExistsException;
 use App\Domain\Recipient\Repositories\RecipientRepository;
@@ -12,6 +13,9 @@ use Prettus\Validator\Contracts\ValidatorInterface;
 
 class RecipientController extends Controller
 {
+    use ResponseTrait;
+
+
     /**
      * @var RecipientRepository
      */
@@ -33,7 +37,7 @@ class RecipientController extends Controller
      */
     public function index()
     {
-        return response()->json($this->repository->paginate(15));
+        return $this->respondWithArray($this->repository->all());
     }
 
     /**
@@ -43,19 +47,21 @@ class RecipientController extends Controller
      */
     public function store(RecipientValidator $validator, Request $request)
     {
+
         $this->validate($request,$validator->getRules(ValidatorInterface::RULE_CREATE));
 
         try {
 
-            return response()->json($this->repository->store($request->all()),Response::HTTP_CREATED);
+            return $this->respondWithItem($this->repository->store($request->all()));
+
 
         } catch (RecipientAlreadyExistsException $exception) {
 
-            return response()->json(['code' => $exception->getCode(),'message'=>$exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->failureResponse($exception->getMessage(),Response::HTTP_UNPROCESSABLE_ENTITY);
 
         } catch (\Exception $exception) {
 
-            return response()->json($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->failureResponse($exception->getMessage());
 
         }
 
