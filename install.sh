@@ -4,10 +4,12 @@ docker-compose down
 
 composer install
 
+cp .env.example .env
+
 docker-compose up -d --force-recreate
 
 >&2 echo "Waiting for MySql to run. Please wait....."
-sleep 30
+sleep 10
 >&2 echo "MySql started :)"
 >&2 echo "Running all phpunit tests now...."
 

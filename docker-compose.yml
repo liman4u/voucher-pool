@@ -14,16 +14,13 @@ services:
     container_name: voucherpool-mysql
     volumes:
       - voucherpool-mysql-data:/var/lib/mysql
-      - ./database/:/docker-entrypoint-initdb.d
     ports:
-      - "33306:3306"
+      - "3306:3306"
     environment:
-          - MYSQL_HOST=localhost
-          - MYSQL_PORT=33306
-          - MYSQL_ROOT_PASSWORD=voucher_pool
-          - MYSQL_DATABASE=voucher_pool_db
-          - MYSQL_USER=voucher_pool
-          - MYSQL_PASSWORD=voucher_pool
+      - MYSQL_ROOT_PASSWORD=voucher_pool
+      - MYSQL_DATABASE=voucher_pool_db
+      - MYSQL_USER=voucher_pool
+      - MYSQL_PASSWORD=voucher_pool
 
   # PHP (with nginx)
   app:
@@ -32,6 +29,6 @@ services:
     volumes:
       - .:/var/www/app
     ports:
-      - "8000:8000"
+      - "8080:8080"
     links:
       - mysql
