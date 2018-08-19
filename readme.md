@@ -3,11 +3,11 @@
 - PHP 7.1.3
 
 - Data was persisted with MySql 5.6 
-    - Postgres connection details:
+    - Connection details:
         - port: `3306`
-        - MYSQL_DATABASE: `voucherpool`
-        - MYSQL_USER: `voucherpool`
-        - MYSQL_PASSWORD: `voucherpool`
+        - MYSQL_DATABASE: `voucher_pool_db`
+        - MYSQL_USER: `voucher_pool`
+        - MYSQL_PASSWORD: `voucher_pool`
 
 - Testing was done with PhpUnit 
 
