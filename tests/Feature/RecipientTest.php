@@ -13,7 +13,7 @@ use App\Domain\Recipient\Models\Recipient;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class CreateRecipientTest extends \TestCase
+class RecipientTest extends \TestCase
 {
 
     use DatabaseTransactions;

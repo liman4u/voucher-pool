@@ -75,7 +75,7 @@ class VoucherRepository extends BaseRepository
     {
             //Generate new code
             $generator = new RandomCodeGenerator();
-            $code = strtoupper($generator->generate(8));
+            $code = strtoupper($generator->generate($size));
 
             return $code;
     }

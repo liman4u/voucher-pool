@@ -13,7 +13,7 @@ use App\Domain\Offer\Models\Offer;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class CreateOfferTest extends \TestCase
+class OfferTest extends \TestCase
 {
 
     use DatabaseTransactions;

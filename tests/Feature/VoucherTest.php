@@ -17,7 +17,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class CreateVoucherTest extends \TestCase
+class VoucherTest extends \TestCase
 {
 
     use DatabaseTransactions;
