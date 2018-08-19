@@ -23,6 +23,8 @@
 
 git clone git@github.com:liman4u/voucher-pool.git
 
+cd voucher-pool
+
 - To start the application server and run tests, run the following from root of application:
 
 sh ./install.sh
